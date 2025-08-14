@@ -1,6 +1,6 @@
-# Frontend feito para desafio Tecnico (biblioteca-frontend)
+# Biblioteca (biblioteca-frontend)
 
-FrontEndo feito para desafio Tecnico
+FrontEnd feito para desafio Tecnico
 
 ## Install the dependencies
 

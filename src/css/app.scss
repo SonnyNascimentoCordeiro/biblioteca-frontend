@@ -1,1 +1,284 @@
 // app global css in SCSS form
+
+// Variáveis de cores personalizadas - Tema Marrom Elegante
+:root {
+  --background-color: #e8dfd3;        /* Fundo principal marrom mais escuro */
+  --background-secondary: #d4c4a8;     /* Fundo secundário marrom médio */
+  --card-background: #ffffff;         /* Fundo dos cards (branco puro) */
+  --card-background-alt: #f5f1eb;    /* Fundo alternativo dos cards */
+  --card-border: #b8a890;             /* Bordas dos cards (marrom médio) */
+  --card-border-dark: #8b7355;        /* Bordas escuras dos cards */
+  --card-shadow: rgba(139, 115, 85, 0.2); /* Sombras marrom mais pronunciadas */
+  --text-primary: #3c2f1f;            /* Texto principal (marrom escuro) */
+  --text-secondary: #6b5b47;          /* Texto secundário (marrom médio) */
+  --text-muted: #8b7355;              /* Texto suave (marrom claro) */
+  --accent-color: #8b4513;             /* Cor de destaque (marrom sienna) */
+  --accent-light: #a0522d;             /* Cor de destaque clara */
+  --success-color: #6b8e23;            /* Cor de sucesso (olive drab) */
+  --warning-color: #daa520;            /* Cor de aviso (goldenrod) */
+  --error-color: #cd5c5c;              /* Cor de erro (indian red) */
+  --hover-color: #e0d5c8;              /* Cor de hover (marrom médio claro) */
+}
+
+// Cor de fundo global do projeto - tema marrom claro
+body {
+  background-color: var(--background-color) !important;
+  color: var(--text-primary);
+}
+
+// Aplicar também ao container principal do Quasar
+.q-page-container {
+  background-color: var(--background-color);
+}
+
+// Garantir que as páginas também tenham o fundo marrom claro
+.q-page {
+  background-color: var(--background-color);
+}
+
+// Estilo para destacar melhor os cards no tema marrom
+.q-card {
+  box-shadow: 0 3px 10px var(--card-shadow);
+  border: 1px solid var(--card-border);
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 5px 15px rgba(139, 115, 85, 0.25);
+    border-color: var(--card-border-dark);
+  }
+}
+
+// Aplicar fundo marrom aos drawers e sidebars
+.q-drawer {
+  background-color: var(--card-background-alt);
+  color: var(--text-primary);
+  border-right: 1px solid var(--card-border);
+}
+
+// Aplicar fundo marrom aos headers
+.q-header {
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: 2px solid var(--accent-light);
+}
+
+// Estilo para inputs e campos de formulário
+.q-input, .q-select, .q-field {
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  
+  .q-field__control {
+    background-color: var(--card-background);
+    border: 2px solid var(--card-border);
+    color: var(--text-primary);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: var(--card-border-dark);
+    }
+  }
+  
+  .q-field__label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  
+  &.q-field--focused .q-field__control {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+  }
+}
+
+// Estilo para botões para combinar com o tema marrom
+.q-btn {
+  &.bg-grey-2 {
+    background-color: var(--card-background-alt) !important;
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: var(--hover-color) !important;
+      border-color: var(--card-border-dark);
+    }
+  }
+  
+  &.bg-white {
+    background-color: var(--card-background) !important;
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    
+    &:hover {
+      background-color: var(--card-background-alt) !important;
+    }
+  }
+  
+  &.bg-primary {
+    background-color: var(--accent-color) !important;
+    color: white;
+    
+    &:hover {
+      background-color: var(--accent-light) !important;
+    }
+  }
+}
+
+// Estilo para listas e itens
+.q-list {
+  background-color: var(--card-background);
+  color: var(--text-primary);
+}
+
+// Estilo para tooltips
+.q-tooltip {
+  background-color: var(--accent-color);
+  color: white;
+  border: 1px solid var(--accent-light);
+  border-radius: 6px;
+}
+
+// Estilo para chips e badges
+.q-chip {
+  background-color: var(--card-background-alt);
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  
+  &.bg-primary {
+    background-color: var(--accent-color) !important;
+    color: white;
+  }
+  
+  &.bg-secondary {
+    background-color: var(--text-secondary) !important;
+    color: white;
+  }
+}
+
+// Estilo para separadores
+.q-separator {
+  background-color: var(--card-border);
+}
+
+// Estilo para itens de lista
+.q-item {
+  color: var(--text-primary);
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: var(--hover-color);
+  }
+  
+  &.q-item--active {
+    background-color: var(--accent-color);
+    color: white;
+  }
+}
+
+// Estilo para labels de itens
+.q-item-label {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+// Estilo para botões de ação
+.q-btn--flat {
+  color: var(--text-primary);
+  
+  &:hover {
+    background-color: var(--hover-color);
+  }
+}
+
+// Estilo para dropdowns
+.q-menu {
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 12px var(--card-shadow);
+}
+
+// Estilo para paginação
+.q-pagination {
+  .q-btn {
+    background-color: var(--card-background);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: var(--hover-color);
+      border-color: var(--card-border-dark);
+    }
+    
+    &.q-btn--active {
+      background-color: var(--accent-color);
+      color: white;
+      border-color: var(--accent-light);
+    }
+  }
+}
+
+// Estilo para tabelas
+.q-table {
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  
+  thead th {
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--card-border);
+  }
+  
+  tbody tr {
+    &:hover {
+      background-color: var(--hover-color);
+    }
+  }
+}
+
+// Estilo para modais e diálogos
+.q-dialog {
+  .q-card {
+    background-color: var(--card-background);
+    border: 2px solid var(--card-border);
+  }
+}
+
+// Estilo para notificações
+.q-notification {
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 12px var(--card-shadow);
+}
+
+// Estilo para campos de pesquisa
+.q-field--search {
+  .q-field__control {
+    background-color: var(--card-background-alt);
+  }
+}
+
+// Estilo para botões de toggle
+.q-toggle {
+  .q-toggle__inner {
+    background-color: var(--card-border);
+    
+    &--truthy {
+      background-color: var(--accent-color);
+    }
+  }
+}
+
+// Estilo para sliders
+.q-slider {
+  .q-slider__track-container {
+    background-color: var(--card-border);
+  }
+  
+  .q-slider__track {
+    background-color: var(--accent-color);
+  }
+}

@@ -5,6 +5,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
+import { useAutenticacaoStore } from 'src/stores/autorizacao/autenticacao';
 import routes from './routes';
 
 /*
@@ -31,6 +32,33 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  // Guard de autenticação
+  Router.beforeEach((to, from, next) => {
+    const authStore = useAutenticacaoStore();
+    
+    // Inicializar autenticação se necessário
+    if (!authStore.isAuthenticated) {
+      authStore.initAuth();
+    }
+
+    // Verificar se a rota requer autenticação
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    
+    // Verificar se deve esconder para usuários autenticados (como página de login)
+    const hideForAuthenticated = to.matched.some(record => record.meta.hideForAuthenticated);
+
+    if (requiresAuth && !authStore.isAuthenticated) {
+      // Rota protegida e usuário não autenticado -> redirecionar para login
+      next('/login');
+    } else if (hideForAuthenticated && authStore.isAuthenticated) {
+      // Página de login e usuário já autenticado -> redirecionar para home
+      next('/');
+    } else {
+      // Permitir navegação
+      next();
+    }
   });
 
   return Router;
