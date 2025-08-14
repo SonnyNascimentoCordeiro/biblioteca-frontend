@@ -1,5 +1,8 @@
 export default {
   pesquisaVazia: 'Não existem registros para serem exibidos!',
+  titulo: 'Titulo',
+  linguagem: 'Linguagem',
+  quantidade: 'Quantidade',
   pesquisa: 'Pesquisa',
   autor: 'Autor',
   autores: 'Autores',

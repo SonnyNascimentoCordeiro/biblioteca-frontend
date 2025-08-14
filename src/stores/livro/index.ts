@@ -1,26 +1,26 @@
 import { defineStore } from 'pinia'
-import { generoService } from 'src/services/genero'
-import type { Genero, GeneroRequest, GeneroFiltro } from 'src/types/genero'
+import { livroService } from 'src/services/livro'
+import type { Livro, LivroRequest, LivroFiltro } from 'src/types/livro'
 import type { Paginacao } from 'src/model/Paginacao'
 
-export interface GeneroState {
-  registros: Genero[]
-  generoSelecionado: Genero | null
+export interface LivroState {
+  registros: Livro[]
+  livroSelecionado: Livro | null
   isLoading: boolean
   error: string | null
-  filtro: GeneroFiltro
+  filtro: LivroFiltro
   paginacao: Paginacao
 }
 
-export const useGeneroStore = defineStore('genero', {
-  state: (): GeneroState => ({
+export const useLivroStore = defineStore('livro', {
+  state: (): LivroState => ({
     registros: [],
-    generoSelecionado: null,
+    livroSelecionado: null,
     isLoading: false,
     error: null,
     filtro: {
       filtros: {},
-      ordenacao: 'nome',
+      ordenacao: 'titulo',
       limite: 20,
       offset: 0,
       page: 0,
@@ -40,103 +40,107 @@ export const useGeneroStore = defineStore('genero', {
   }),
 
   getters: {
-    genero: (state) => state.generoSelecionado,
+    livro: (state) => state.livroSelecionado,
     podeIncluir: (state) => !state.isLoading,
-    podeEditar: (state) => !state.isLoading && !!state.generoSelecionado,
-    podeExcluir: (state) => !state.isLoading && !!state.generoSelecionado
+    podeEditar: (state) => !state.isLoading && !!state.livroSelecionado,
+    podeExcluir: (state) => !state.isLoading && !!state.livroSelecionado
   },
 
   actions: {
     /**
-     * Buscar gênero por ID
+     * Buscar livro por ID
      */
-    async buscarPorId(id: number): Promise<Genero> {
+    async buscarPorId(id: number): Promise<Livro> {
       try {
-        const genero = await generoService.buscarPorId(id)
-        this.generoSelecionado = genero
-        return genero
+        const livro = await livroService.buscarPorId(id)
+        this.livroSelecionado = livro
+        return livro
       } catch (error: unknown) {
-        this.error = error instanceof Error ? error.message : 'Erro ao buscar gênero'
+        this.error = error instanceof Error ? error.message : 'Erro ao buscar livro'
         throw error
       }
     },
 
     /**
-     * Criar novo gênero
+     * Criar novo livro
      */
-    async criar(genero: GeneroRequest): Promise<Genero> {
+    async criar(livro: LivroRequest): Promise<Livro> {
       try {
-        const novoGenero = await generoService.criar(genero)
+        const novoLivro = await livroService.criar(livro)
 
         // Adicionar à lista se estiver na primeira página
         if (this.paginacao.paginaAtual === 0) {
-          this.registros.unshift(novoGenero)
+          this.registros.unshift(novoLivro)
         }
 
-        console.log('✅ Gênero criado:', novoGenero.nome)
-        return novoGenero
+        console.log('✅ Livro criado:', novoLivro.titulo)
+        return novoLivro
       } catch (error: unknown) {
-        this.error = error instanceof Error ? error.message : 'Erro ao criar gênero'
+        this.error = error instanceof Error ? error.message : 'Erro ao criar livro'
         throw error
       }
     },
 
     /**
-     * Atualizar gênero existente
+     * Atualizar livro existente
      */
-    async atualizar(id: number, genero: Partial<Genero>): Promise<Genero> {
+    async atualizar(id: number, livro: Partial<Livro>): Promise<Livro> {
       try {
-        const generoRequest: GeneroRequest = {
-          nome: genero.nome || '',
-          descricao: genero.descricao || ''
+        const livroRequest: LivroRequest = {
+          idGenero: livro.idGenero || 0,
+          idAutor: livro.idAutor || 0,
+          titulo: livro.titulo || '',
+          descricao: livro.descricao || '',
+          linguagem: livro.linguagem || '',
+          qtdUnidade: livro.qtdUnidade || 0
         }
 
-        const generoAtualizado = await generoService.atualizar(id, generoRequest)
+        const livroAtualizado = await livroService.atualizar(id, livroRequest)
 
         // Atualizar na lista
-        const index = this.registros.findIndex(g => g.id === id)
+        const index = this.registros.findIndex(l => l.id === id)
         if (index !== -1) {
-          this.registros[index] = generoAtualizado
+          this.registros[index] = livroAtualizado
         }
 
         // Atualizar selecionado se for o mesmo
-        if (this.generoSelecionado?.id === id) {
-          this.generoSelecionado = generoAtualizado
+        if (this.livroSelecionado?.id === id) {
+          this.livroSelecionado = livroAtualizado
         }
 
-        console.log('✅ Gênero atualizado:', generoAtualizado.nome)
-        return generoAtualizado
+        console.log('✅ Livro atualizado:', livroAtualizado.titulo)
+        return livroAtualizado
       } catch (error: unknown) {
-        this.error = error instanceof Error ? error.message : 'Erro ao atualizar gênero'
+        this.error = error instanceof Error ? error.message : 'Erro ao atualizar livro'
         throw error
       }
     },
 
     /**
-     * Excluir gênero
+     * Excluir livro
      */
     async excluir(id: number): Promise<void> {
       try {
-        console.log('🗑️ Store: Iniciando exclusão do gênero ID:', id);
-        await generoService.excluir(id)
+        console.log('🗑️ Store: Iniciando exclusão do livro ID:', id);
+        await livroService.excluir(id)
 
         // Remover da lista
-        const index = this.registros.findIndex(g => g.id === id)
+        const index = this.registros.findIndex(l => l.id === id)
         if (index !== -1) {
           this.registros.splice(index, 1)
         }
 
         // Limpar selecionado se for o mesmo
-        if (this.generoSelecionado?.id === id) {
-          this.generoSelecionado = null
+        if (this.livroSelecionado?.id === id) {
+          this.livroSelecionado = null
         }
 
-        console.log('✅ Gênero excluído com sucesso')
+        console.log('✅ Livro excluído com sucesso')
       } catch (error: unknown) {
-        console.error(' Store: Erro ao excluir gênero:', error);
+        console.error(' Store: Erro ao excluir livro:', error);
 
         // Capturar a mensagem de erro apropriada
-        let errorMessage = 'Erro ao excluir gênero';
+        let errorMessage = 'Erro ao excluir livro';
 
         if (error instanceof Error) {
           errorMessage = error.message;
@@ -155,9 +159,9 @@ export const useGeneroStore = defineStore('genero', {
     },
 
     /**
-     * Pesquisar gêneros
+     * Pesquisar livros
      */
-    async pesquisar(filtro: Partial<GeneroFiltro>): Promise<void> {
+    async pesquisar(filtro: Partial<LivroFiltro>): Promise<void> {
       try {
         this.isLoading = true
         this.error = null
@@ -165,7 +169,7 @@ export const useGeneroStore = defineStore('genero', {
         // Atualizar filtro da store
         this.filtro = { ...this.filtro, ...filtro }
 
-        const resultado = await generoService.pesquisar(this.filtro)
+        const resultado = await livroService.pesquisar(this.filtro)
 
         this.registros = resultado.content
         this.paginacao = {
@@ -190,17 +194,17 @@ export const useGeneroStore = defineStore('genero', {
     },
 
     /**
-     * Selecionar gênero
+     * Selecionar livro
      */
-    selecionarGenero(genero: Genero) {
-      this.generoSelecionado = genero
+    selecionarLivro(livro: Livro) {
+      this.livroSelecionado = livro
     },
 
     /**
-     * Limpar gênero selecionado
+     * Limpar livro selecionado
      */
     limparSelecao() {
-      this.generoSelecionado = null
+      this.livroSelecionado = null
     },
 
     /**
@@ -215,12 +219,12 @@ export const useGeneroStore = defineStore('genero', {
      */
     reset() {
       this.registros = []
-      this.generoSelecionado = null
+      this.livroSelecionado = null
       this.isLoading = false
       this.error = null
       this.filtro = {
         filtros: {},
-        ordenacao: 'nome',
+        ordenacao: 'titulo',
         limite: 20,
         offset: 0,
         page: 0,

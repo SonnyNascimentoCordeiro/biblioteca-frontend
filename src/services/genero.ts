@@ -31,11 +31,11 @@ export const generoService = {
       if (response.data.success) {
         return response.data.data;
       } else {
-        console.error('❌ Erro na resposta da API:', response.data.message);
+        console.error(' Erro na resposta da API:', response.data.message);
         throw new Error(response.data.message || 'Erro na pesquisa de gêneros');
       }
     } catch (error) {
-      console.error('❌ Erro na requisição de pesquisa:', error);
+      console.error(' Erro na requisição de pesquisa:', error);
       throw error;
     }
   },
@@ -90,7 +90,7 @@ export const generoService = {
    */
   async excluir(id: number): Promise<void> {
     console.log('🗑️ Iniciando exclusão do gênero ID:', id);
-    
+
     try {
       const response = await api.delete<RetornoApi<void>>(`${BASE_URL}/${id}`);
       console.log('✅ Resposta da exclusão:', response.data);
@@ -108,19 +108,19 @@ export const generoService = {
         console.log('✅ Exclusão confirmada (HTTP 204)');
         return;
       }
-      
+
       // Se não for 204, verificar o campo success da resposta
       if (response.data && response.data.success === false) {
         // Se explicitamente marcado como false, lançar erro
         throw new Error(response.data.message || 'Erro ao excluir gênero');
       }
-      
+
       // Se chegou até aqui, considerar como sucesso
       console.log('✅ Exclusão confirmada como bem-sucedida');
-      
+
     } catch (error) {
-      console.error('❌ Erro na exclusão do gênero:', error);
-      
+      console.error(' Erro na exclusão do gênero:', error);
+
       // Se for um erro HTTP com mensagem customizada, preservar a mensagem
       if (error instanceof Error) {
         throw error; // Re-throw para manter a mensagem original

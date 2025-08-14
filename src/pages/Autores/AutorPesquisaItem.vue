@@ -8,7 +8,7 @@
             Criado em: {{ formatarData(itemLocal.criacao) }}
           </div>
         </div>
-        
+
         <div class="col-auto">
           <div class="row q-gutter-xs">
             <q-btn
@@ -58,10 +58,10 @@
 
       <q-card-actions align="right">
         <q-btn flat label="Cancelar" color="primary" v-close-popup />
-        <q-btn 
-          flat 
-          label="Excluir" 
-          color="negative" 
+        <q-btn
+          flat
+          label="Excluir"
+          color="negative"
           @click="excluirAutor"
           v-close-popup
         />
@@ -116,15 +116,15 @@ async function excluirAutor() {
       message: 'Autor excluído com sucesso!',
       position: 'top',
     });
-    
+
     // Emitir evento para recarregar dados ou remover da listagem
     emit('excluiu', itemLocal.value.id);
   } catch (error) {
-    console.error('❌ Erro na exclusão do autor:', error);
-    
+    console.error(' Erro na exclusão do autor:', error);
+
     // Capturar a mensagem de erro apropriada
     let errorMessage = 'Erro ao excluir autor';
-    
+
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (typeof error === 'string') {
@@ -132,7 +132,7 @@ async function excluirAutor() {
     } else if (error && typeof error === 'object' && 'message' in error) {
       errorMessage = String(error.message);
     }
-    
+
     $q.notify({
       type: 'negative',
       message: errorMessage,

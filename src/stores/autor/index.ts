@@ -178,11 +178,11 @@ export const useAutorStore = defineStore('autor', {
 
         console.log('✅ Autor excluído:', id);
       } catch (error: unknown) {
-        console.error('❌ Store: Erro ao excluir autor:', error);
-        
+        console.error(' Store: Erro ao excluir autor:', error);
+
         // Capturar a mensagem de erro apropriada
         let errorMessage = 'Erro ao excluir autor';
-        
+
         if (error instanceof Error) {
           errorMessage = error.message;
         } else if (typeof error === 'string') {
@@ -190,10 +190,10 @@ export const useAutorStore = defineStore('autor', {
         } else if (error && typeof error === 'object' && 'message' in error) {
           errorMessage = String(error.message);
         }
-        
+
         this.error = errorMessage;
         console.log('📝 Mensagem de erro definida no store:', errorMessage);
-        
+
         throw error;
       } finally {
         this.isLoading = false;

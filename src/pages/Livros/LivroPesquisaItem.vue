@@ -3,12 +3,23 @@
     <q-card-section>
       <div class="row items-center q-gutter-md">
         <div class="col-grow">
-          <div class="text-h6">{{ itemLocal.nome }}</div>
+          <div class="text-h6">{{ itemLocal.titulo }}</div>
           <div class="text-caption text-grey-6">
-            {{ itemLocal.descricao || 'Sem descrição' }}
-          </div>
-          <div class="text-caption text-grey-6">
-            Criado em: {{ formatarData(itemLocal.criacao) }}
+            <div class="row q-gutter-md">
+              <span><strong>Autor:</strong> {{ getAutorNome(itemLocal.idAutor) }}</span>
+              <span><strong>Gênero:</strong> {{ getGeneroNome(itemLocal.idGenero) }}</span>
+              <span><strong>Linguagem:</strong> {{ itemLocal.linguagem }}</span>
+              <span><strong>Unidades:</strong> {{ itemLocal.qtdUnidade }}</span>
+            </div>
+            <div class="q-mt-xs">
+              <strong>Descrição:</strong> {{ itemLocal.descricao || 'Sem descrição' }}
+            </div>
+            <div class="q-mt-xs text-grey-5">
+              Criado em: {{ formatarData(itemLocal.criacao) }}
+              <span v-if="itemLocal.edicao" class="q-ml-md">
+                | Editado em: {{ formatarData(itemLocal.edicao) }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -20,7 +31,7 @@
               dense
               color="primary"
               icon="visibility"
-              @click="visualizarGenero"
+              @click="visualizarLivro"
               title="Visualizar"
             />
             <q-btn
@@ -29,7 +40,7 @@
               dense
               color="secondary"
               icon="edit"
-              @click="editarGenero"
+              @click="editarLivro"
               title="Editar"
             />
             <q-btn
@@ -56,7 +67,7 @@
       </q-card-section>
 
       <q-card-section>
-        Tem certeza que deseja excluir o gênero <strong>"{{ itemLocal.nome }}"</strong>?
+        Tem certeza que deseja excluir o livro <strong>"{{ itemLocal.titulo }}"</strong>?
       </q-card-section>
 
       <q-card-actions align="right">
@@ -65,7 +76,7 @@
           flat
           label="Excluir"
           color="negative"
-          @click="excluirGenero"
+          @click="excluirLivro"
           v-close-popup
         />
       </q-card-actions>
@@ -77,17 +88,21 @@
 import { useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useLivroStore } from 'src/stores/livro'
+import { useAutorStore } from 'src/stores/autor'
 import { useGeneroStore } from 'src/stores/genero'
-import type { Genero } from 'src/types/genero'
+import type { Livro } from 'src/types/livro'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 const props = defineProps<{
-  item: Genero
+  item: Livro
 }>()
 
 const router = useRouter()
 const $q = useQuasar()
+const livroStore = useLivroStore()
+const autorStore = useAutorStore()
 const generoStore = useGeneroStore()
 
 const itemLocal = computed(() => props.item)
@@ -96,36 +111,48 @@ const showDeleteDialog = ref(false)
 function formatarData(data: string) {
   if (!data) return '-'
   try {
-    return format(new Date(data), 'dd/MM/yyyy', { locale: ptBR })
+    return format(new Date(data), 'dd/MM/yyyy HH:mm', { locale: ptBR })
   } catch {
     return data
   }
 }
 
-function visualizarGenero() {
-  void router.push(`/generos/${itemLocal.value.id}`)
+function getAutorNome(idAutor: number): string {
+  // Buscar o autor no store ou retornar ID se não encontrado
+  const autor = autorStore.registros.find(a => a.id === idAutor)
+  return autor ? autor.nome : `ID: ${idAutor}`
 }
 
-function editarGenero() {
-  void router.push(`/generos/${itemLocal.value.id}`)
+function getGeneroNome(idGenero: number): string {
+  // Buscar o gênero no store ou retornar ID se não encontrado
+  const genero = generoStore.registros.find(g => g.id === idGenero)
+  return genero ? genero.nome : `ID: ${idGenero}`
 }
 
-async function excluirGenero() {
+function visualizarLivro() {
+  void router.push(`/livros/${itemLocal.value.id}`)
+}
+
+function editarLivro() {
+  void router.push(`/livros/${itemLocal.value.id}`)
+}
+
+async function excluirLivro() {
   try {
-    await generoStore.excluir(itemLocal.value.id)
+    await livroStore.excluir(itemLocal.value.id)
     $q.notify({
       type: 'positive',
-      message: 'Gênero excluído com sucesso!',
+      message: 'Livro excluído com sucesso!',
       position: 'top',
     })
 
     // Emitir evento para recarregar dados ou remover da listagem
     emit('excluiu', itemLocal.value.id)
   } catch (error) {
-    console.error(' Erro na exclusão do gênero:', error);
+    console.error(' Erro na exclusão do livro:', error);
 
     // Capturar a mensagem de erro apropriada
-    let errorMessage = 'Erro ao excluir gênero';
+    let errorMessage = 'Erro ao excluir livro';
 
     if (error instanceof Error) {
       errorMessage = error.message;
@@ -146,6 +173,5 @@ async function excluirGenero() {
 
 const emit = defineEmits<{
   excluiu: [id: number]
-  editar: [genero: Genero]
 }>()
 </script>

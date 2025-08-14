@@ -71,6 +71,38 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      // Rotas de Livros
+      {
+        path: 'livros',
+        component: () => import('pages/Livros/LivroPage.vue'),
+        meta: { requiresAuth: true },
+        children: [
+          {
+            path: '',
+            name: 'livros',
+            meta: { requiresAuth: true },
+            component: () => import('pages/Livros/LivroPesquisa.vue'),
+          },
+          {
+            path: 'novo',
+            name: 'livro-novo',
+            meta: { requiresAuth: true },
+            component: () => import('pages/Livros/LivroCadastro.vue'),
+          },
+          {
+            path: ':id',
+            name: 'livro-visualizar',
+            meta: { requiresAuth: true },
+            component: () => import('pages/Livros/LivroVisualizacao.vue'),
+          },
+          {
+            path: ':id/editar',
+            name: 'livro-editar',
+            meta: { requiresAuth: true },
+            component: () => import('pages/Livros/LivroCadastro.vue'),
+          },
+        ],
+      },
     ],
   },
 

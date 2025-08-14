@@ -24,12 +24,16 @@
           </q-card-section>
         </q-card>
 
-        <q-card class="my-card">
+        <q-card
+          class="my-card cursor-pointer"
+          clickable
+          @click="$router.push('/livros')"
+        >
           <q-card-section class="text-center">
             <q-icon name="book" size="4rem" color="secondary" />
             <div class="text-h6 q-mt-md">Livros</div>
             <div class="text-caption text-grey-6">
-              Em desenvolvimento
+              Gerenciar livros do sistema
             </div>
           </q-card-section>
         </q-card>

@@ -1,9 +1,9 @@
 <template>
-  <div class="genero-pesquisa">
+  <div class="livro-pesquisa">
     <PesquisaPadrao
       :paginacao="paginacao"
-      :loading="generoStore.isLoading"
-      :registros="generoStore.registros"
+      :loading="livroStore.isLoading"
+      :registros="livroStore.registros"
       @pesquisou="realizarPesquisa($event)"
       @limpou="limparPesquisa"
     >
@@ -11,27 +11,37 @@
         <q-btn
           color="positive"
           icon="add"
-          label="Novo Genero"
-          @click="criarGenero"
+          label="Novo Livro"
+          @click="criarLivro"
         />
       </template>
 
       <template #filtros>
         <div class="row q-gutter-md">
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-4">
             <q-input
-              v-model="filtros.nome"
-              label="Nome do Gênero"
+              v-model="filtros.titulo"
+              label="Título do Livro"
               dense
               outlined
               clearable
               @keyup.enter="aplicarFiltros"
             />
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-4">
             <q-input
               v-model="filtros.descricao"
               label="Descrição"
+              dense
+              outlined
+              clearable
+              @keyup.enter="aplicarFiltros"
+            />
+          </div>
+          <div class="col-12 col-md-4">
+            <q-input
+              v-model="filtros.linguagem"
+              label="Linguagem"
               dense
               outlined
               clearable
@@ -42,18 +52,18 @@
       </template>
 
       <template #listagem>
-        <div v-if="generoStore.registros.length > 0">
-          <GeneroPesquisaItem
-            v-for="(autor, index) in generoStore.registros"
-            :key="autor.id"
+        <div v-if="livroStore.registros.length > 0">
+          <LivroPesquisaItem
+            v-for="(livro, index) in livroStore.registros"
+            :key="livro.id"
             :id="index"
-            :item="autor"
-            @excluiu="onGeneroExcluido"
+            :item="livro"
+            @excluiu="onLivroExcluido"
           />
         </div>
-        <div v-else-if="!generoStore.isLoading" class="text-center q-pa-lg">
+        <div v-else-if="!livroStore.isLoading" class="text-center q-pa-lg">
           <q-icon name="search" size="4rem" color="grey-4"/>
-          <div class="text-h6 text-grey-6 q-mt-md">Nenhum genero encontrado</div>
+          <div class="text-h6 text-grey-6 q-mt-md">Nenhum livro encontrado</div>
           <div class="text-caption text-grey-5">Tente ajustar os filtros de pesquisa</div>
         </div>
       </template>
@@ -61,17 +71,17 @@
 
     <!-- Banner de erro -->
     <q-banner
-      v-if="generoStore.error"
+      v-if="livroStore.error"
       class="text-white bg-negative q-mt-md"
       rounded
     >
-      {{ generoStore.error }}
+      {{ livroStore.error }}
       <template #action>
         <q-btn
           flat
           color="white"
           label="Fechar"
-          @click="generoStore.limparErro()"
+          @click="livroStore.limparErro()"
         />
       </template>
     </q-banner>
@@ -82,47 +92,47 @@
 import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {useQuasar} from 'quasar'
-import {useGeneroStore} from 'src/stores/genero'
+import {useLivroStore} from 'src/stores/livro'
 import PesquisaPadrao from 'components/PesquisaPadrao.vue'
-import GeneroPesquisaItem from 'pages/Generos/GeneroPesquisaItem.vue'
+import LivroPesquisaItem from 'pages/Livros/LivroPesquisaItem.vue'
 
 // Composables
 const router = useRouter()
 const $q = useQuasar()
-const generoStore = useGeneroStore()
+const livroStore = useLivroStore()
 
 // Estado local
 const paginaAtual = ref(1)
 
 // Filtros
 const filtros = ref({
-  nome: '',
-  descricao: ''
+  titulo: '',
+  descricao: '',
+  linguagem: ''
 })
 
 // Computed
 const paginacao = computed(() => ({
-  paginaAtual: generoStore.paginacao.paginaAtual,
-  totalRegistros: generoStore.paginacao.totalRegistros,
-  registrosCarregados: generoStore.paginacao.registrosCarregados,
-  ultima: generoStore.paginacao.ultima,
-  totalPaginas: generoStore.paginacao.totalPaginas
+  paginaAtual: livroStore.paginacao.paginaAtual,
+  totalRegistros: livroStore.paginacao.totalRegistros,
+  registrosCarregados: livroStore.paginacao.registrosCarregados,
+  ultima: livroStore.paginacao.ultima,
+  totalPaginas: livroStore.paginacao.totalPaginas
 }))
 
 // Métodos
 async function realizarPesquisa(termo: string) {
   console.log('🚀 Realizando pesquisa com termo:', termo)
-  console.log(filtros.value.nome)
   paginaAtual.value = 1
 
   try {
-    await generoStore.pesquisar({
+    await livroStore.pesquisar({
       filtros: {
-        nome: termo
+        titulo: termo
       },
       page: 0,           // ✅ Número da página (começa em 0)
       size: 20,          // ✅ Tamanho da página (padrão 20)
-      ordenacao: 'nome', // ✅ Campo de ordenação
+      ordenacao: 'titulo', // ✅ Campo de ordenação
       offset: 0          // ✅ Offset para paginação
     })
   } catch (error) {
@@ -137,63 +147,65 @@ async function realizarPesquisa(termo: string) {
 
 function limparPesquisa() {
   // Limpar filtros
-  filtros.value.nome = ''
+  filtros.value.titulo = ''
   filtros.value.descricao = ''
+  filtros.value.linguagem = ''
 
   paginaAtual.value = 1
-  generoStore.reset()
+  livroStore.reset()
 }
 
 async function aplicarFiltros() {
   paginaAtual.value = 1
 
-  await generoStore.pesquisar({
+  await livroStore.pesquisar({
     filtros: {
-      nome: filtros.value.nome,
-      descricao: filtros.value.descricao
+      titulo: filtros.value.titulo,
+      descricao: filtros.value.descricao,
+      linguagem: filtros.value.linguagem
     },
     page: 0,
     size: 20,
-    ordenacao: 'nome',
+    ordenacao: 'titulo',
     offset: 0
   })
 }
 
-function criarGenero() {
-  void router.push('/generos/novo')
+function criarLivro() {
+  void router.push('/livros/novo')
 }
 
-function onGeneroExcluido(id: number) {
+function onLivroExcluido(id: number) {
   // O store já remove o item automaticamente, mas podemos fazer uma verificação adicional
   // ou implementar lógica específica se necessário
 
   // Atualizar a paginação se necessário
-  if (generoStore.registros.length === 0 && generoStore.paginacao.totalRegistros > 0) {
+  if (livroStore.registros.length === 0 && livroStore.paginacao.totalRegistros > 0) {
     // Se não há mais registros na página atual, voltar para a página anterior
-    const paginaAnterior = Math.max(0, generoStore.paginacao.paginaAtual - 1)
-    if (paginaAnterior !== generoStore.paginacao.paginaAtual) {
-      void generoStore.pesquisar({
+    const paginaAnterior = Math.max(0, livroStore.paginacao.paginaAtual - 1)
+    if (paginaAnterior !== livroStore.paginacao.paginaAtual) {
+      void livroStore.pesquisar({
         filtros: {},
         page: paginaAnterior,
         size: 20,
-        ordenacao: 'nome',
+        ordenacao: 'titulo',
         offset: paginaAnterior * 20
       })
     }
   }
 
-  console.log(`✅ Gênero com ID ${id} foi excluído da listagem`)
+  console.log(`✅ Livro com ID ${id} foi excluído da listagem`)
 }
 
 // Lifecycle
 onMounted(async () => {
   // Carregar dados iniciais
   try {
-    await generoStore.pesquisar({
+    await livroStore.pesquisar({
       filtros: {},
       page: 0,
       size: 20,
-      ordenacao: 'nome',
+      ordenacao: 'titulo',
       offset: 0
     })
   } catch (error) {
@@ -203,7 +215,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.genero-pesquisa {
+.livro-pesquisa {
   width: 100%;
 }
 

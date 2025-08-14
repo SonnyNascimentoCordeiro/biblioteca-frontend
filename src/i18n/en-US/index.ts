@@ -1,5 +1,8 @@
 export default {
   pesquisaVazia: 'Dont have any registre!',
+  titulo: 'Title',
+  linguagem: 'Language',
+  quantidade: 'Amount',
   autor: 'Author',
   pesquisa: 'Search',
   autores: 'Authors',

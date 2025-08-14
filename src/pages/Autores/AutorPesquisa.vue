@@ -110,7 +110,7 @@ const paginacao = computed(() => ({
 // Methods
 async function realizarPesquisa(termo: string) {
   console.log('🚀 Realizando pesquisa com termo:', termo);
-  
+
   try {
     // Enviar filtro na estrutura que o backend espera
     await autorStore.pesquisar({
@@ -123,7 +123,7 @@ async function realizarPesquisa(termo: string) {
       offset: 0          // ✅ Offset para paginação
     });
   } catch (error) {
-    console.error('❌ Erro na pesquisa:', error);
+    console.error(' Erro na pesquisa:', error);
     $q.notify({
       type: 'negative',
       message: `Erro: ${error instanceof Error ? error.message : 'Erro desconhecido'}`,
@@ -198,7 +198,7 @@ onMounted(async () => {
       offset: 0
     });
   } catch (error) {
-    console.error('❌ Erro ao carregar dados iniciais:', error);
+    console.error(' Erro ao carregar dados iniciais:', error);
   }
 });
 </script>

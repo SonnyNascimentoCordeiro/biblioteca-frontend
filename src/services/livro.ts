@@ -1,27 +1,27 @@
 import { api } from './api';
 import type {
-  Autor,
+  Livro,
   PaginaResultado,
-  AutorRequest,
-  AutorResponse
-} from 'src/types/autor';
-import type { AutorFiltro } from 'src/model/catalogo/Autor';
+  LivroRequest,
+  LivroResponse
+} from 'src/types/livro';
+import type { LivroFiltro } from 'src/types/livro';
 import type { RetornoApi } from 'src/types/auth';
 
-const BASE_URL = '/api/v1/autores';
+const BASE_URL = '/api/v1/livros';
 
-export const autorService = {
+export const livroService = {
 
   /**
-   * Pesquisar autores com filtros
+   * Pesquisar livros com filtros
    */
-  async pesquisar(filtro: AutorFiltro): Promise<PaginaResultado<Autor>> {
-    console.log('🔍 Iniciando pesquisa de autores...');
+  async pesquisar(filtro: LivroFiltro): Promise<PaginaResultado<Livro>> {
+    console.log('🔍 Iniciando pesquisa de livros...');
     console.log('📋 Filtros enviados:', filtro);
     console.log('🌐 URL da requisição:', `${BASE_URL}/pesquisar`);
 
     try {
-      const response = await api.post<RetornoApi<PaginaResultado<Autor>>>(
+      const response = await api.post<RetornoApi<PaginaResultado<Livro>>>(
         `${BASE_URL}/pesquisar`,
         filtro
       );
@@ -32,7 +32,7 @@ export const autorService = {
         return response.data.data;
       } else {
         console.error(' Erro na resposta da API:', response.data.message);
-        throw new Error(response.data.message || 'Erro na pesquisa de autores');
+        throw new Error(response.data.message || 'Erro na pesquisa de livros');
       }
     } catch (error) {
       console.error(' Erro na requisição de pesquisa:', error);
@@ -40,100 +40,100 @@ export const autorService = {
       if (error instanceof Error) {
         throw error;
       } else {
-        throw new Error('Erro desconhecido na pesquisa de autores');
+        throw new Error('Erro desconhecido na pesquisa de livros');
       }
     }
   },
 
   /**
-   * Buscar autor por ID
+   * Buscar livro por ID
    */
-  async buscarPorId(id: number): Promise<Autor> {
-    console.log('🔍 Buscando autor por ID:', id);
+  async buscarPorId(id: number): Promise<Livro> {
+    console.log('🔍 Buscando livro por ID:', id);
 
     try {
-      const response = await api.get<RetornoApi<Autor>>(`${BASE_URL}/${id}`);
+      const response = await api.get<RetornoApi<Livro>>(`${BASE_URL}/${id}`);
       console.log('✅ Resposta da busca:', response.data);
 
       if (response.data.success) {
         return response.data.data;
       } else {
-        throw new Error(response.data.message || 'Erro ao buscar autor');
+        throw new Error(response.data.message || 'Erro ao buscar livro');
       }
     } catch (error) {
-      console.error(' Erro ao buscar autor:', error);
+      console.error(' Erro ao buscar livro:', error);
 
       if (error instanceof Error) {
         throw error;
       } else {
-        throw new Error('Erro desconhecido ao buscar autor');
+        throw new Error('Erro desconhecido ao buscar livro');
       }
     }
   },
 
   /**
-   * Criar novo autor
+   * Criar novo livro
    */
-  async criar(autor: AutorRequest): Promise<Autor> {
-    console.log('➕ Criando novo autor:', autor);
+  async criar(livro: LivroRequest): Promise<Livro> {
+    console.log('➕ Criando novo livro:', livro);
 
     try {
-      const response = await api.post<RetornoApi<AutorResponse>>(
+      const response = await api.post<RetornoApi<LivroResponse>>(
         BASE_URL,
-        autor
+        livro
       );
       console.log('✅ Resposta da criação:', response.data);
 
       if (response.data.success) {
         return response.data.data;
       } else {
-        throw new Error(response.data.message || 'Erro ao criar autor');
+        throw new Error(response.data.message || 'Erro ao criar livro');
       }
     } catch (error) {
-      console.error(' Erro ao criar autor:', error);
+      console.error(' Erro ao criar livro:', error);
 
       if (error instanceof Error) {
         throw error;
       } else {
-        throw new Error('Erro desconhecido ao criar autor');
+        throw new Error('Erro desconhecido ao criar livro');
       }
     }
   },
 
   /**
-   * Atualizar autor existente
+   * Atualizar livro existente
    */
-  async atualizar(id: number, autor: AutorRequest): Promise<Autor> {
-    console.log('✏️ Atualizando autor ID:', id, 'com dados:', autor);
+  async atualizar(id: number, livro: LivroRequest): Promise<Livro> {
+    console.log('✏️ Atualizando livro ID:', id, 'com dados:', livro);
 
     try {
-      const response = await api.put<RetornoApi<AutorResponse>>(
+      const response = await api.put<RetornoApi<LivroResponse>>(
         `${BASE_URL}/${id}`,
-        autor
+        livro
       );
       console.log('✅ Resposta da atualização:', response.data);
 
       if (response.data.success) {
         return response.data.data;
       } else {
-        throw new Error(response.data.message || 'Erro ao atualizar autor');
+        throw new Error(response.data.message || 'Erro ao atualizar livro');
       }
     } catch (error) {
-      console.error(' Erro ao atualizar autor:', error);
+      console.error(' Erro ao atualizar livro:', error);
 
       if (error instanceof Error) {
         throw error;
       } else {
-        throw new Error('Erro desconhecido ao atualizar autor');
+        throw new Error('Erro desconhecido ao atualizar livro');
       }
     }
   },
 
   /**
-   * Excluir autor
+   * Excluir livro
    */
   async excluir(id: number): Promise<void> {
-    console.log('🗑️ Iniciando exclusão do autor ID:', id);
+    console.log('🗑️ Iniciando exclusão do livro ID:', id);
 
     try {
       const response = await api.delete<RetornoApi<void>>(`${BASE_URL}/${id}`);
@@ -156,33 +156,33 @@ export const autorService = {
       // Se não for 204, verificar o campo success da resposta
       if (response.data && response.data.success === false) {
         // Se explicitamente marcado como false, lançar erro
-        throw new Error(response.data.message || 'Erro ao excluir autor');
+        throw new Error(response.data.message || 'Erro ao excluir livro');
       }
 
       // Se chegou até aqui, considerar como sucesso
       console.log('✅ Exclusão confirmada como bem-sucedida');
 
     } catch (error) {
-      console.error(' Erro na exclusão do autor:', error);
+      console.error(' Erro na exclusão do livro:', error);
 
       // Se for um erro HTTP com mensagem customizada, preservar a mensagem
       if (error instanceof Error) {
         throw error; // Re-throw para manter a mensagem original
       } else {
-        throw new Error('Erro desconhecido ao excluir autor');
+        throw new Error('Erro desconhecido ao excluir livro');
       }
     }
   },
 
   /**
-   * Listar todos os autores (para selects)
+   * Listar todos os livros (para selects)
    */
-  async listarTodos(): Promise<Autor[]> {
-    const filtro: AutorFiltro = {
+  async listarTodos(): Promise<Livro[]> {
+    const filtro: LivroFiltro = {
       filtros: {},
       page: 0,
       size: 1000, // Buscar muitos para selects
-      ordenacao: 'nome',
+      ordenacao: 'titulo',
       offset: 0,
       limite: 1000
     };
