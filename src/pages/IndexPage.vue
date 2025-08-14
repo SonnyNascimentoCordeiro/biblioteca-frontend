@@ -57,7 +57,7 @@
           <template #avatar>
             <q-icon name="info" />
           </template>
-          Sistema desenvolvido para o desafio técnico Siemens
+          Sistema desenvolvido para Demonstração
         </q-banner>
       </div>
     </div>
