@@ -13,7 +13,7 @@
       align="right"
       class="q-pa-sm">
       <q-btn
-        :icon="'las la-save'"
+        icon="save"
         :label="t('salvar')"
         class="bg-accent text-white"
         dense
@@ -22,7 +22,7 @@
         :label="t('cancelar')"
         class="bg-accent text-white"
         dense
-        icon="las la-undo"
+        icon="undo"
         @click="cancelar()"/>
     </q-card-actions>
     <q-inner-loading :showing="carregando">

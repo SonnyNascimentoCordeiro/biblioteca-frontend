@@ -202,14 +202,15 @@ function handleLogout() {
 <style scoped>
 .menu-drawer {
   background-color: var(--card-background-alt);
-  border-right: 2px solid var(--card-border);
+  border-right: none;
 }
 
 .menu-header {
   background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
   color: white;
-  border-radius: 0 0 12px 12px;
-  margin: -1px -1px 0 -1px;
+  border-radius: 0;
+  margin: 0;
+  padding: 16px;
 }
 
 .menu-list {
@@ -247,8 +248,8 @@ function handleLogout() {
 .menu-footer {
   border-top: 1px solid var(--card-border);
   background-color: var(--background-secondary);
-  margin: 0 -1px -1px -1px;
-  border-radius: 0 0 0 8px;
+  margin: 0;
+  border-radius: 0;
 }
 
 /* Estilos para dispositivos móveis */

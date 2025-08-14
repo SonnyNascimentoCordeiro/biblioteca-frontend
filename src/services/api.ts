@@ -20,6 +20,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
       console.log('🔐 Token adicionado ao header:', token.substring(0, 20) + '...');
       console.log('📡 Fazendo requisição para:', config.url);
+      console.log('📋 Headers da requisição:', config.headers);
 
       // Decodificar e mostrar o conteúdo do token para debug
       try {
@@ -36,7 +37,7 @@ api.interceptors.request.use(
           });
         }
       } catch (e) {
-        console.log(' Erro ao decodificar token:', e);
+        console.log('❌ Erro ao decodificar token:', e);
       }
     } else {
       console.log('⚠️ Nenhum token encontrado no LocalStorage');

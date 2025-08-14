@@ -115,6 +115,26 @@ const routes: RouteRecordRaw[] = [
         path: 'usuarios',
         component: () => import('pages/Usuarios/UsuarioPage.vue'),
         meta: { requiresAuth: true, requiresAdmin: true },
+        children: [
+          {
+            path: '',
+            name: 'usuarios',
+            meta: { requiresAuth: true, requiresAdmin: true },
+            component: () => import('pages/Usuarios/UsuarioPesquisa.vue'),
+          },
+          {
+            path: 'novo',
+            name: 'usuario-novo',
+            meta: { requiresAuth: true, requiresAdmin: true },
+            component: () => import('pages/Usuarios/UsuarioCadastro.vue'),
+          },
+          {
+            path: ':id/editar',
+            name: 'usuario-editar',
+            meta: { requiresAuth: true, requiresAdmin: true },
+            component: () => import('pages/Usuarios/UsuarioCadastro.vue'),
+          },
+        ],
       },
     ],
   },
