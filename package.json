@@ -11,7 +11,13 @@
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "dev": "quasar dev",
     "build": "quasar build",
-    "postinstall": "quasar prepare"
+    "postinstall": "quasar prepare",
+    "docker:dev": "docker-compose --profile dev up --build",
+    "docker:prod": "docker-compose --profile prod up --build -d",
+    "docker:stop": "docker-compose down",
+    "docker:clean": "docker-compose down -v --remove-orphans",
+    "docker:logs": "docker-compose logs -f",
+    "docker:shell": "docker-compose exec frontend-dev sh"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
@@ -45,7 +51,7 @@
     "vue-tsc": "^2.0.29"
   },
   "engines": {
-    "node": "^28 || ^26 || ^24 || ^22 || ^20 || ^18",
+    "node": "^20.19.0 || >=22.12.0",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }

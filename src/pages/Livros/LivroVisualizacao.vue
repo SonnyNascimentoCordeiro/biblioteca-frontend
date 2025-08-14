@@ -19,12 +19,14 @@
             <div class="col-auto">
               <div class="row q-gutter-xs">
                 <q-btn
+                  v-if="!authStore.isCliente"
                   color="secondary"
                   icon="edit"
                   label="Editar"
                   @click="editarLivro"
                 />
                 <q-btn
+                  v-if="!authStore.isCliente"
                   color="negative"
                   icon="delete"
                   label="Excluir"
@@ -162,6 +164,7 @@ import { useAutorStore } from 'src/stores/autor'
 import { useGeneroStore } from 'src/stores/genero'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import {useAutenticacaoStore} from "stores/autorizacao/autenticacao";
 
 const router = useRouter()
 const route = useRoute()
@@ -169,6 +172,7 @@ const $q = useQuasar()
 const livroStore = useLivroStore()
 const autorStore = useAutorStore()
 const generoStore = useGeneroStore()
+const authStore = useAutenticacaoStore()
 
 const showDeleteDialog = ref(false)
 

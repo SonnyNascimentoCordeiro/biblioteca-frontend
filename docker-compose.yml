@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # Frontend - Desenvolvimento
+  frontend-dev:
+    build:
+      context: .
+      target: development
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - biblioteca-network
+    profiles:
+      - dev
+
+  # Frontend - Produção
+  frontend-prod:
+    build:
+      context: .
+      target: production
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - biblioteca-network
+    profiles:
+      - prod
+    restart: unless-stopped
+
+  # Backend (exemplo - você pode remover se não precisar)
+  backend:
+    image: node:20-alpine
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+    networks:
+      - biblioteca-network
+    profiles:
+      - prod
+    restart: unless-stopped
+
+  # Nginx reverso (opcional)
+  nginx-reverse:
+    image: nginx:alpine
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx-reverse.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend-prod
+      - backend
+    networks:
+      - biblioteca-network
+    profiles:
+      - prod
+    restart: unless-stopped
+
+networks:
+  biblioteca-network:
+    driver: bridge
+
+volumes:
+  node_modules:

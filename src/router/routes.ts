@@ -8,6 +8,13 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false, hideForAuthenticated: true },
   },
 
+  // Rota de Registro (sem autenticação)
+  {
+    path: '/registro',
+    component: () => import('pages/RegistroPage.vue'),
+    meta: { requiresAuth: false, hideForAuthenticated: true },
+  },
+
   // Rotas protegidas (requerem autenticação)
   {
     path: '/',
@@ -102,6 +109,12 @@ const routes: RouteRecordRaw[] = [
             component: () => import('pages/Livros/LivroCadastro.vue'),
           },
         ],
+      },
+      // Rotas de Usuários (só para Administradores)
+      {
+        path: 'usuarios',
+        component: () => import('pages/Usuarios/UsuarioPage.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true },
       },
     ],
   },

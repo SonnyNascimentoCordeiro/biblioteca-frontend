@@ -65,6 +65,22 @@
                 />
               </div>
             </q-form>
+
+            <!-- Link para registro -->
+            <div class="text-center q-pt-md">
+              <q-separator class="q-my-md" />
+              <p class="text-grey-6 q-ma-none q-mb-sm">
+                Não tem uma conta?
+              </p>
+              <q-btn
+                label="Criar Conta"
+                color="secondary"
+                size="md"
+                flat
+                @click="irParaRegistro"
+                :disable="authStore.isLoading"
+              />
+            </div>
           </q-card-section>
         </q-card>
       </q-page>
@@ -110,6 +126,10 @@ const handleLogin = async () => {
       position: 'top',
     });
   }
+};
+
+const irParaRegistro = () => {
+  void router.push('/registro');
 };
 </script>
 

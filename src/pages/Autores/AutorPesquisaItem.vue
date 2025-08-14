@@ -11,16 +11,9 @@
 
         <div class="col-auto">
           <div class="row q-gutter-xs">
+            <!-- Botões de edição e exclusão só para usuários que não são clientes (userType 'C') -->
             <q-btn
-              flat
-              round
-              dense
-              color="primary"
-              icon="visibility"
-              @click="visualizarAutor"
-              title="Visualizar"
-            />
-            <q-btn
+              v-if="!authStore.isCliente"
               flat
               round
               dense
@@ -30,6 +23,7 @@
               title="Editar"
             />
             <q-btn
+              v-if="!authStore.isCliente"
               flat
               round
               dense
@@ -78,6 +72,7 @@ import { useAutorStore } from 'src/stores/autor';
 import type { Autor } from 'src/types/autor';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useAutenticacaoStore } from 'src/stores/autorizacao/autenticacao';
 
 const props = defineProps<{
   item: Autor;
@@ -87,6 +82,7 @@ const props = defineProps<{
 const router = useRouter();
 const $q = useQuasar();
 const autorStore = useAutorStore();
+const authStore = useAutenticacaoStore();
 
 const itemLocal = computed(() => props.item);
 const showDeleteDialog = ref(false);
@@ -98,10 +94,6 @@ function formatarData(data: string) {
   } catch {
     return data;
   }
-}
-
-function visualizarAutor() {
-  void router.push(`/autores/${itemLocal.value.id}`);
 }
 
 function editarAutor() {

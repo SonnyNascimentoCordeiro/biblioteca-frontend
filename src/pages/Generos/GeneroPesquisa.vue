@@ -8,10 +8,12 @@
       @limpou="limparPesquisa"
     >
       <template #actions>
+        <!-- Botões de ação só para usuários que não são clientes (userType 'C') -->
         <q-btn
+          v-if="!authStore.isCliente"
           color="positive"
           icon="add"
-          label="Novo Genero"
+          label="Novo Gênero"
           @click="criarGenero"
         />
       </template>
@@ -85,11 +87,13 @@ import {useQuasar} from 'quasar'
 import {useGeneroStore} from 'src/stores/genero'
 import PesquisaPadrao from 'components/PesquisaPadrao.vue'
 import GeneroPesquisaItem from 'pages/Generos/GeneroPesquisaItem.vue'
+import {useAutenticacaoStore} from 'src/stores/autorizacao/autenticacao'
 
 // Composables
 const router = useRouter()
 const $q = useQuasar()
 const generoStore = useGeneroStore()
+const authStore = useAutenticacaoStore()
 
 // Estado local
 const paginaAtual = ref(1)

@@ -14,16 +14,10 @@
 
         <div class="col-auto">
           <div class="row q-gutter-xs">
+
+            <!-- Botões de edição e exclusão só para usuários que não são clientes (userType 'C') -->
             <q-btn
-              flat
-              round
-              dense
-              color="primary"
-              icon="visibility"
-              @click="visualizarGenero"
-              title="Visualizar"
-            />
-            <q-btn
+              v-if="!authStore.isCliente"
               flat
               round
               dense
@@ -33,6 +27,7 @@
               title="Editar"
             />
             <q-btn
+              v-if="!authStore.isCliente"
               flat
               round
               dense
@@ -81,6 +76,7 @@ import { useGeneroStore } from 'src/stores/genero'
 import type { Genero } from 'src/types/genero'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { useAutenticacaoStore } from 'src/stores/autorizacao/autenticacao'
 
 const props = defineProps<{
   item: Genero
@@ -89,6 +85,7 @@ const props = defineProps<{
 const router = useRouter()
 const $q = useQuasar()
 const generoStore = useGeneroStore()
+const authStore = useAutenticacaoStore()
 
 const itemLocal = computed(() => props.item)
 const showDeleteDialog = ref(false)
@@ -100,10 +97,6 @@ function formatarData(data: string) {
   } catch {
     return data
   }
-}
-
-function visualizarGenero() {
-  void router.push(`/generos/${itemLocal.value.id}`)
 }
 
 function editarGenero() {

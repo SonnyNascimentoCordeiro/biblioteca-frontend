@@ -46,12 +46,18 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // Verificar se a rota requer autenticação
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
+    // Verificar se a rota requer admin (role 'A')
+    const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+    
     // Verificar se deve esconder para usuários autenticados (como página de login)
     const hideForAuthenticated = to.matched.some(record => record.meta.hideForAuthenticated);
 
     if (requiresAuth && !authStore.isAuthenticated) {
       // Rota protegida e usuário não autenticado -> redirecionar para login
       next('/login');
+    } else if (requiresAdmin && !authStore.isAdmin) {
+      // Rota requer admin mas usuário não tem userType 'A' -> redirecionar para home
+      next('/');
     } else if (hideForAuthenticated && authStore.isAuthenticated) {
       // Página de login e usuário já autenticado -> redirecionar para home
       next('/');

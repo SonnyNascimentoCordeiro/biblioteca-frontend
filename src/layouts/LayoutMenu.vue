@@ -82,6 +82,23 @@
         </q-item-section>
       </q-item>
 
+      <!-- Menu de Usuários - Só para Administradores (UserType 'A') -->
+      <q-item
+        v-if="authStore.isAdmin"
+        clickable
+        @click="navigateTo('/usuarios')"
+        class="menu-item"
+        :class="{ 'menu-item--active': $route.path === '/usuarios' }"
+      >
+        <q-item-section avatar>
+          <q-icon name="people" color="brown-7"/>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-weight-medium">Usuários</q-item-label>
+          <q-item-label caption class="text-brown-6">Gerenciar usuários</q-item-label>
+        </q-item-section>
+      </q-item>
+
       <q-separator class="q-my-md"/>
 
       <q-item-label header class="text-brown-7 text-weight-medium">

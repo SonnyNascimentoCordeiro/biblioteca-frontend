@@ -34,7 +34,9 @@
               @click="visualizarLivro"
               title="Visualizar"
             />
+            <!-- Botões de edição e exclusão só para usuários que não são clientes (userType 'C') -->
             <q-btn
+              v-if="!authStore.isCliente"
               flat
               round
               dense
@@ -44,6 +46,7 @@
               title="Editar"
             />
             <q-btn
+              v-if="!authStore.isCliente"
               flat
               round
               dense
@@ -91,6 +94,7 @@ import { useQuasar } from 'quasar'
 import { useLivroStore } from 'src/stores/livro'
 import { useAutorStore } from 'src/stores/autor'
 import { useGeneroStore } from 'src/stores/genero'
+import { useAutenticacaoStore } from 'src/stores/autorizacao/autenticacao'
 import type { Livro } from 'src/types/livro'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -104,6 +108,7 @@ const $q = useQuasar()
 const livroStore = useLivroStore()
 const autorStore = useAutorStore()
 const generoStore = useGeneroStore()
+const authStore = useAutenticacaoStore()
 
 const itemLocal = computed(() => props.item)
 const showDeleteDialog = ref(false)

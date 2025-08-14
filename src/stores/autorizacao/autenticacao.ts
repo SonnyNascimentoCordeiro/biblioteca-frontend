@@ -19,9 +19,14 @@ export const useAutenticacaoStore = defineStore('autenticacao', {
     isLoggedIn: (state) => state.isAuthenticated,
     currentUser: (state) => state.user,
     userRoles: (state) => state.roles,
+    userType: (state) => state.user?.userType || '',
     hasError: (state) => !!state.error,
     hasRole: (state) => (role: string) => state.roles.includes(role),
     hasAnyRole: (state) => (roles: string[]) => roles.some(role => state.roles.includes(role)),
+    // Verificações baseadas no userType
+    isAdmin: (state) => state.user?.userType === 'A',
+    isCliente: (state) => state.user?.userType === 'C',
+    hasUserType: (state) => (userType: string) => state.user?.userType === userType,
   },
 
   actions: {

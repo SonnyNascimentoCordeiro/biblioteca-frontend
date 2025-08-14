@@ -8,7 +8,9 @@
       @limpou="limparPesquisa"
     >
       <template #actions>
+        <!-- Botões de ação só para usuários que não são clientes (userType 'C') -->
         <q-btn
+          v-if="!authStore.isCliente"
           color="positive"
           icon="add"
           label="Novo Livro"
@@ -93,6 +95,7 @@ import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {useQuasar} from 'quasar'
 import {useLivroStore} from 'src/stores/livro'
+import {useAutenticacaoStore} from 'src/stores/autorizacao/autenticacao'
 import PesquisaPadrao from 'components/PesquisaPadrao.vue'
 import LivroPesquisaItem from 'pages/Livros/LivroPesquisaItem.vue'
 
@@ -100,6 +103,7 @@ import LivroPesquisaItem from 'pages/Livros/LivroPesquisaItem.vue'
 const router = useRouter()
 const $q = useQuasar()
 const livroStore = useLivroStore()
+const authStore = useAutenticacaoStore()
 
 // Estado local
 const paginaAtual = ref(1)

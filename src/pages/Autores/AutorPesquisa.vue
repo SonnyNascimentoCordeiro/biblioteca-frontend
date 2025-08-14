@@ -14,7 +14,9 @@
       :paginacao="paginacao">
 
       <template #actions>
+        <!-- Botões de ação só para usuários que não são clientes (userType 'C') -->
         <q-btn
+          v-if="!authStore.isCliente"
           color="positive"
           icon="add"
           label="Novo Autor"
@@ -84,6 +86,7 @@ import {useQuasar} from 'quasar';
 import PesquisaPadrao from 'src/components/PesquisaPadrao.vue';
 import AutorPesquisaItem from 'src/pages/Autores/AutorPesquisaItem.vue';
 import {useAutorStore} from 'src/stores/autor';
+import {useAutenticacaoStore} from 'src/stores/autorizacao/autenticacao';
 // import { autorService } from 'src/services/autor';
 
 
@@ -91,6 +94,7 @@ const router = useRouter();
 const $q = useQuasar();
 // const { t } = useI18n();
 const autorStore = useAutorStore();
+const authStore = useAutenticacaoStore();
 
 // State
 const pesquisaRef = ref();
