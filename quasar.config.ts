@@ -53,7 +53,12 @@ export default defineConfig((ctx) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        VITE_APP_TITLE: 'Biblioteca',
+        VITE_APP_API_URL: 'http://localhost:8090/biblioteca',
+        VITE_APP_VERSION: '1.0.0',
+        VITE_API_URL: 'http://localhost:8090/biblioteca'
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -113,7 +118,7 @@ export default defineConfig((ctx) => {
       },
       https: false,
       // https: true,
-      port: 4600,
+      port: 9000,
       open: true, // opens browser window automatically
     },
 

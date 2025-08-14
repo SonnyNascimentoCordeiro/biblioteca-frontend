@@ -106,6 +106,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useLivroStore } from 'src/stores/livro'
+import { useAutorStore } from 'src/stores/autor'
+import { useGeneroStore } from 'src/stores/genero'
 import AutorSelect from 'src/components/selects/AutorSelect.vue'
 import GeneroSelect from 'src/components/selects/GeneroSelect.vue'
 import CadastroPadrao from 'src/components/CadastroPadrao.vue'
@@ -116,6 +118,8 @@ const router = useRouter()
 const route = useRoute()
 const $q = useQuasar()
 const livroStore = useLivroStore()
+const autorStore = useAutorStore()
+const generoStore = useGeneroStore()
 const { t } = useI18n()
 
 // Estado local
@@ -185,12 +189,25 @@ async function carregarLivro() {
       idGenero: livro.idGenero
     }
 
-    // Preencher os selects com objetos válidos
+    // Buscar dados completos do autor e gênero
     if (livro.idAutor) {
-      autorSelecionado.value = { id: livro.idAutor, nome: '' }
+      try {
+        const autor = await autorStore.buscarPorId(livro.idAutor)
+        autorSelecionado.value = { id: autor.id, nome: autor.nome }
+      } catch (error) {
+        console.error('Erro ao buscar autor:', error)
+        autorSelecionado.value = { id: livro.idAutor, nome: '' }
+      }
     }
+
     if (livro.idGenero) {
-      generoSelecionado.value = { id: livro.idGenero, nome: '' }
+      try {
+        const genero = await generoStore.buscarPorId(livro.idGenero)
+        generoSelecionado.value = { id: genero.id, nome: genero.nome }
+      } catch (error) {
+        console.error('Erro ao buscar gênero:', error)
+        generoSelecionado.value = { id: livro.idGenero, nome: '' }
+      }
     }
   } catch (error) {
     console.error('Erro ao carregar livro:', error)

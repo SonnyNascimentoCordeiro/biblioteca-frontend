@@ -2,7 +2,7 @@ import axios, { type AxiosInstance } from 'axios';
 import { LocalStorage } from 'quasar';
 
 // Configuração da URL base da API
-const API_BASE_URL = process.env.VUE_APP_API_URL || 'http://localhost:8090/biblioteca';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8090/biblioteca';
 
 // Criar instância do Axios para a API
 export const api: AxiosInstance = axios.create({

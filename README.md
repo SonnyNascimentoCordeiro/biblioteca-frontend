@@ -1,43 +1,72 @@
-# Biblioteca (biblioteca-frontend)
+# 📚 Biblioteca Frontend
 
-FrontEnd feito para desafio Tecnico
+Frontend da aplicação de biblioteca desenvolvido com Vue.js, Quasar e TypeScript.
 
-## Install the dependencies
+## 🚀 **Inicialização Rápida**
 
+### **1. Testar Ambiente (Recomendado)**
 ```bash
-yarn
-# or
-npm install
+# Windows
+.\test-docker.bat
+
+# Linux/Mac  
+./test-docker.sh
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-
+### **2. Iniciar Projeto**
 ```bash
-quasar dev
+# Windows
+.\start-docker.bat
+
+# Linux/Mac
+./start-docker.sh
 ```
 
-### Lint the files
+## 🎯 **O que acontece?**
+
+1. **Docker inicia automaticamente** o ambiente isolado
+2. **Frontend roda** na porta 9000 (desenvolvimento)
+3. **Backend configurado** para conectar na porta 8090 (seu backend separado)
+4. **Sem instalação** de Node.js, npm ou yarn
+5. **Ambiente completamente isolado** do sistema
+
+## 📋 **Pré-requisitos**
+
+- ✅ Docker Desktop instalado e rodando
+- ❌ **NÃO precisa de Node.js**
+- ❌ **NÃO precisa de npm/yarn**
+- ❌ **NÃO contamina o ambiente**
+
+## 🔗 **URLs de Acesso**
+
+- **Frontend**: http://localhost:9000
+- **Backend**: http://localhost:8090 (seu backend separado)
+
+## 🛠️ **Comandos Úteis**
 
 ```bash
-yarn lint
-# or
-npm run lint
+# Ver status dos serviços
+docker-compose ps
+
+# Ver logs
+docker-compose logs -f
+
+# Parar tudo
+docker-compose down
+
+# Limpar ambiente
+docker-compose down -v --remove-orphans
 ```
 
-### Format the files
+## 📚 **Documentação Completa**
 
-```bash
-yarn format
-# or
-npm run format
-```
+Para mais detalhes, consulte o [DOCKER_README.md](./DOCKER_README.md).
 
-### Build the app for production
+---
 
-```bash
-quasar build
-```
+**🎯 Projeto pronto para rodar com um clique!**
 
-### Customize the configuration
-
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+**✅ Sem Node.js local necessário**
+**✅ Sem npm/yarn local necessário**  
+**✅ Ambiente completamente isolado**
+**✅ Conecta com seu backend na porta 8090**

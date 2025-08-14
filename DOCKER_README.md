@@ -1,144 +1,113 @@
 # 🐳 Docker - Biblioteca Frontend
 
-Este projeto está configurado para rodar em Docker com diferentes ambientes e configurações otimizadas.
+Este projeto está configurado para rodar em Docker de forma **completamente isolada**, sem contaminar o ambiente local e sem necessidade de configurações adicionais.
 
-## 🚀 **Configurações Disponíveis**
+## 🚀 **Inicialização Rápida**
 
-### **Desenvolvimento**
+### **1. Testar Ambiente (Recomendado)**
+```bash
+# Windows
+.\test-docker.bat
+
+# Linux/Mac  
+./test-docker.sh
+```
+
+### **2. Iniciar Projeto**
+```bash
+# Windows
+.\start-docker.bat
+
+# Linux/Mac
+./start-docker.sh
+```
+
+## 🎯 **Ambiente Disponível**
+
+### **Desenvolvimento** 
+- **Frontend**: http://localhost:9000
+- **Backend**: http://localhost:8090 (seu backend separado)
 - Hot-reload ativo
 - Volumes montados para desenvolvimento
-- Porta 9000
-
-### **Produção**
-- Build otimizado
-- Nginx configurado
-- Compressão Gzip
-- Headers de segurança
-- Porta 80
 
 ## 📋 **Pré-requisitos**
 
-- Docker Desktop instalado
-- Docker Compose v2+
-- Node.js 18+ (para desenvolvimento local)
+- ✅ Docker Desktop instalado e rodando
+- ✅ Docker Compose v2+
+- ❌ **NÃO precisa de Node.js instalado**
+- ❌ **NÃO precisa de npm/yarn instalado**
+- ❌ **NÃO contamina o ambiente local**
 
-## 🛠️ **Comandos Docker**
+## 🛠️ **Comandos Manuais (Opcional)**
 
-### **Desenvolvimento**
+Se preferir usar comandos diretos:
+
 ```bash
-# Iniciar ambiente de desenvolvimento
-npm run docker:dev
+# Desenvolvimento
+docker-compose up --build
 
-# Acessar: http://localhost:9000
-```
-
-### **Produção**
-```bash
-# Build e deploy em produção
-npm run docker:prod
-
-# Acessar: http://localhost:80
-```
-
-### **Gerenciamento**
-```bash
 # Parar todos os serviços
-npm run docker:stop
+docker-compose down
 
-# Parar e limpar volumes
-npm run docker:clean
-
-# Ver logs em tempo real
-npm run docker:logs
-
-# Acessar shell do container
-npm run docker:shell
+# Limpar ambiente
+docker-compose down -v --remove-orphans
 ```
 
 ## 🏗️ **Estrutura Docker**
 
 ```
-├── Dockerfile              # Multi-stage build
+├── Dockerfile              # Build para desenvolvimento
 ├── docker-compose.yml      # Orquestração dos serviços
-├── nginx.conf             # Configuração nginx para produção
-├── nginx-reverse.conf     # Nginx reverso com SSL
-├── .dockerignore          # Arquivos excluídos do build
+├── .dockerignore          # Otimização do build
+├── docker.env             # Variáveis de ambiente
+├── test-docker.bat        # Teste do ambiente (Windows)
+├── test-docker.sh         # Teste do ambiente (Linux/Mac)
+├── start-docker.bat       # Inicialização (Windows)
+├── start-docker.sh        # Inicialização (Linux/Mac)
 └── DOCKER_README.md       # Este arquivo
 ```
 
-## 🔧 **Configurações Avançadas**
+## 🔧 **Configurações**
+
+### **Portas**
+- **Frontend**: 9000
+- **Backend**: 8090 (seu backend separado)
 
 ### **Variáveis de Ambiente**
 ```bash
 # Desenvolvimento
 NODE_ENV=development
-CHOKIDAR_USEPOLLING=true
-
-# Produção
-NODE_ENV=production
+VITE_API_URL=http://localhost:8090/biblioteca
 ```
-
-### **Portas**
-- **Desenvolvimento**: 9000
-- **Produção**: 80
-- **Backend**: 8080
-- **SSL**: 443
 
 ### **Volumes**
 - Código fonte montado em desenvolvimento
 - Node modules isolados
-- Configurações nginx persistentes
 
-## 🚀 **Deploy em Produção**
+## 🚀 **Deploy**
 
-### **1. Build da Imagem**
+### **Build da Imagem**
 ```bash
 docker build -t biblioteca-frontend:latest .
 ```
 
-### **2. Deploy com Docker Compose**
+### **Deploy com Docker Compose**
 ```bash
-docker-compose --profile prod up -d
+docker-compose up --build
 ```
 
-### **3. Verificar Status**
+### **Verificar Status**
 ```bash
 docker-compose ps
 docker-compose logs -f
 ```
 
-## 🔒 **Segurança**
-
-### **Headers de Segurança**
-- X-Frame-Options: SAMEORIGIN
-- X-Content-Type-Options: nosniff
-- X-XSS-Protection: 1; mode=block
-- Referrer-Policy: strict-origin-when-cross-origin
-
-### **Rate Limiting**
-- API: 10 requests/segundo
-- Login: 5 requests/minuto
-
-### **SSL/TLS**
-- Protocolos: TLSv1.2, TLSv1.3
-- Ciphers seguros configurados
-- HSTS habilitado
-
 ## 📊 **Monitoramento**
-
-### **Health Check**
-```bash
-# Verificar status da aplicação
-curl http://localhost/health
-```
 
 ### **Logs**
 ```bash
 # Logs do frontend
-docker-compose logs frontend-prod
-
-# Logs do nginx
-docker-compose logs nginx-reverse
+docker-compose logs -f frontend-dev
 ```
 
 ## 🐛 **Troubleshooting**
@@ -148,17 +117,16 @@ docker-compose logs nginx-reverse
 #### **Porta já em uso**
 ```bash
 # Verificar portas em uso
-netstat -tulpn | grep :80
+netstat -tulpn | grep :9000
 
 # Parar serviços conflitantes
-sudo systemctl stop nginx
+docker-compose down
 ```
 
 #### **Permissões de arquivo**
 ```bash
-# Corrigir permissões
-sudo chown -R $USER:$USER .
-chmod +x docker-compose.yml
+# Corrigir permissões (Linux/Mac)
+chmod +x start-docker.sh
 ```
 
 #### **Limpeza de containers**
@@ -177,40 +145,19 @@ docker-compose exec frontend-dev sh
 docker-compose logs -f --tail=100
 ```
 
-## 🔄 **CI/CD**
-
-### **GitHub Actions (exemplo)**
-```yaml
-name: Deploy to Production
-on:
-  push:
-    branches: [main]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build and Deploy
-        run: |
-          docker build -t biblioteca-frontend:${{ github.sha }} .
-          docker push biblioteca-frontend:${{ github.sha }}
-```
-
-## 📚 **Recursos Adicionais**
-
-- [Docker Documentation](https://docs.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-- [Nginx Configuration](https://nginx.org/en/docs/)
-- [Vue.js Deployment](https://vuejs.org/guide/best-practices/production-deployment.html)
-
 ## 🤝 **Suporte**
 
 Para dúvidas ou problemas com Docker:
-1. Verificar logs: `npm run docker:logs`
-2. Verificar status: `docker-compose ps`
-3. Limpar ambiente: `npm run docker:clean`
-4. Rebuild: `npm run docker:prod`
+1. **Usar os scripts**: `start-docker.bat` ou `start-docker.sh`
+2. Verificar logs: `docker-compose logs -f`
+3. Verificar status: `docker-compose ps`
+4. Limpar ambiente: `docker-compose down -v --remove-orphans`
 
 ---
 
-**🎯 Projeto configurado e pronto para Docker!**
+**🎯 Projeto configurado para rodar de forma isolada e sem configurações!**
+
+**✅ Sem Node.js local necessário**
+**✅ Sem npm/yarn local necessário**  
+**✅ Ambiente completamente isolado**
+**✅ Conecta com seu backend na porta 8090**

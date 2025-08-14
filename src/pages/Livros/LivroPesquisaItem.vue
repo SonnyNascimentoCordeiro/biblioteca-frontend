@@ -139,7 +139,7 @@ function visualizarLivro() {
 }
 
 function editarLivro() {
-  void router.push(`/livros/${itemLocal.value.id}`)
+  void router.push(`/livros/${itemLocal.value.id}/editar`)
 }
 
 async function excluirLivro() {
